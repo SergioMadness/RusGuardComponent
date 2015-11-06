@@ -47,30 +47,6 @@ class Skud
      */
     public $password;
 
-    public function __construct()
-    {
-//        $context = stream_context_create(array(
-//            'ssl' => [
-//                'verify_peer' => false,
-//                'verify_peer_name' => false,
-//                'allow_self_signed' => true
-//            ],
-//            'https' => [
-//                'curl_verify_ssl_peer' => false,
-//                'curl_verify_ssl_host' => false
-//            ],
-//        ));
-
-        $this->SOAPClient = new \SoapClient($this->url,
-            [
-                'trace' => 1,
-                'cache_wsdl' => WSDL_CACHE_NONE
-            ]);
-        if ($this->location) {
-            $this->SOAPClient->__setLocation($this->location);
-        }
-    }
-
     /**
      * Adding of auth header
      */
@@ -84,7 +60,27 @@ class Skud
         $header     = new \SoapHeader("http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-secext-1.0.xsd",
             "Security", $authvalues, true);
 
-        $this->SOAPClient->__setSoapHeaders($header);
+        $this->getSoap()->__setSoapHeaders($header);
+    }
+
+    /**
+     * Get SOAP object
+     *
+     * @return \SoapClient
+     */
+    protected function getSoap()
+    {
+        if ($this->SOAPClient === null) {
+            $this->SOAPClient = new \SoapClient($this->url,
+                [
+                    'trace' => 1,
+                    'cache_wsdl' => WSDL_CACHE_NONE
+                ]);
+            if ($this->location) {
+                $this->SOAPClient->__setLocation($this->location);
+            }
+        }
+        return $this->SOAPClient;
     }
 
     /**
@@ -97,7 +93,7 @@ class Skud
         try {
             if (empty($this->connectioId)) {
                 $this->addHeader();
-                $connectionResult  = $this->SOAPClient->Connect();
+                $connectionResult  = $this->getSoap()->Connect();
                 $this->connectioId = $connectionResult->ConnectResult;
             }
             $result = true;
@@ -137,7 +133,7 @@ class Skud
         $result = false;
         try {
             $this->addHeader();
-            $connectionResult = $this->SOAPClient->GetNotification([
+            $connectionResult = $this->getSoap()->GetNotification([
                 'connectionId' => $this->connectioId
             ]);
             $result           = $connectionResult->GetNotificationResult->EmployeePassageNotifications->EmployeePassageNotification;
@@ -156,7 +152,7 @@ class Skud
      */
     public function disconnect()
     {
-        $result = $this->SOAPClient->Disconnect();
+        $result = $this->getSoap()->Disconnect();
         return $result !== null;
     }
 
@@ -181,7 +177,7 @@ class Skud
             $data->data->CreationDateTime = date('Y-m-d\TH:i:s.811P');
             $data->data->EmployeeGroupID  = $groupId;
 
-            $result = new Employee($this->SOAPClient->AddAcsEmployee($data)->AddAcsEmployeeResult);
+            $result = new Employee($this->getSoap()->AddAcsEmployee($data)->AddAcsEmployeeResult);
         } catch (\SoapFault $ex) {
             $this->logError();
         }
@@ -213,9 +209,9 @@ class Skud
             $data->keyData->Description = 'Карта номер:' . $cardNumber;
 
             if (!$force) {
-                $result = $this->SOAPClient->AssignAcsKeyForEmployee($data);
+                $result = $this->getSoap()->AssignAcsKeyForEmployee($data);
             } else {
-                $result = $this->SOAPClient->ForceAssignAcsKeyForEmployee($data);
+                $result = $this->getSoap()->ForceAssignAcsKeyForEmployee($data);
             }
         } catch (\SoapFault $ex) {
             $this->logError();
@@ -236,7 +232,7 @@ class Skud
         $result     = false;
         $cardNumber = $this->prepareKey($cardNumber);
         try {
-            $result = $this->SOAPClient->SetStatusOfAcsKeyAsLost([
+            $result = $this->getSoap()->SetStatusOfAcsKeyAsLost([
                 'keyNumber' => $cardNumber,
                 'indexNumber' => $index,
                 'employeeID' => $employeeId
@@ -259,7 +255,7 @@ class Skud
         $result     = null;
 
         try {
-            $soapResult = $this->SOAPClient->GetAssignedAcsKeyByKeyNumber([
+            $soapResult = $this->getSoap()->GetAssignedAcsKeyByKeyNumber([
                 'keyNumber' => $cardNumber
             ]);
             if (isset($soapResult->GetAssignedAcsKeyByKeyNumberResult->AcsEmployeeId)) {
@@ -282,7 +278,7 @@ class Skud
     {
         $result = null;
         try {
-            $result = $this->SOAPClient->RemoveAcsEmployee([
+            $result = $this->getSoap()->RemoveAcsEmployee([
                 'id' => $id
             ]);
         } catch (\SoapFault $ex) {
@@ -302,7 +298,7 @@ class Skud
         $cardNumber = $this->prepareKey($cardNumber);
         $result     = null;
         try {
-            $empResult = $this->SOAPClient->GetAssignedAcsKeyByKeyNumber([
+            $empResult = $this->getSoap()->GetAssignedAcsKeyByKeyNumber([
                 'keyNumber' => $cardNumber
             ]);
             if ($empResult->GetAssignedAcsKeyByKeyNumberResult !== null) {
@@ -325,7 +321,7 @@ class Skud
 
         $this->addHeader();
         try {
-            $rawGroups = $this->SOAPClient->GetAcsEmployeeGroups()->GetAcsEmployeeGroupsResult;
+            $rawGroups = $this->getSoap()->GetAcsEmployeeGroups()->GetAcsEmployeeGroupsResult;
             if (isset($rawGroups->AcsEmployeeGroup) && is_array($rawGroups->AcsEmployeeGroup)) {
                 $rawGroups = $rawGroups->AcsEmployeeGroup;
             }
@@ -350,7 +346,7 @@ class Skud
         $result = null;
         $this->addHeader();
         try {
-            $result = $this->SOAPClient->GetVariable([
+            $result = $this->getSoap()->GetVariable([
                 'name' => $name
             ]);
         } catch (\SoapFault $ex) {
@@ -390,7 +386,7 @@ class Skud
         if ($freeIndex > 0) {
             $this->addHeader();
             try {
-                $result = $this->SOAPClient->SetAcsEmployeePhoto([
+                $result = $this->getSoap()->SetAcsEmployeePhoto([
                     'employeeId' => $employeeId,
                     'photoNumber' => $freeIndex,
                     'data' => $base64Data
@@ -414,7 +410,7 @@ class Skud
     {
         $this->addHeader();
         try {
-            $result = $this->SOAPClient->GetAcsEmployeePhoto([
+            $result = $this->getSoap()->GetAcsEmployeePhoto([
                 'employeeId' => $employeeId,
                 'photoNumber' => $index
             ]);
@@ -519,7 +515,7 @@ class Skud
 
         $this->addHeader();
         try {
-            $result = $this->SOAPClient->GetEvents([
+            $result = $this->getSoap()->GetEvents([
                 'fromDateTime' => $from,
                 'toDateTime' => $to,
                 'pageNumber' => $page,
@@ -541,14 +537,14 @@ class Skud
      */
     protected function logError()
     {
-        $errorMsg = "Request:\n" . $this->SOAPClient->__getLastRequest() .
+        $errorMsg = "Request:\n" . $this->getSoap()->__getLastRequest() .
             "\n<br>" .
-            $this->SOAPClient->__getLastRequestHeaders() .
+            $this->getSoap()->__getLastRequestHeaders() .
             "\n\n\n\n<br><br><br><br>"
             . "Response:\n<br>" .
-            $this->SOAPClient->__getLastResponse() .
+            $this->getSoap()->__getLastResponse() .
             "\n<br>" .
-            $this->SOAPClient->__getLastResponseHeaders();
+            $this->getSoap()->__getLastResponseHeaders();
     }
 
     /**
