@@ -347,15 +347,16 @@ class Skud
      */
     public function getVariable($name)
     {
+        $result = null;
         $this->addHeader();
         try {
-            return $this->SOAPClient->GetVariable([
+            $result = $this->SOAPClient->GetVariable([
                 'name' => $name
             ]);
         } catch (\SoapFault $ex) {
-            $result = false;
             $this->logError();
         }
+        return $result;
     }
 
     /**
