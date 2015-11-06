@@ -1,0 +1,24 @@
+{
+    "name": "datalayerru/skud",
+    "version": "0.1",
+    "description": "Commponent for communication with RusGuard",
+    "keywords": ["RusGuard", "rgsec", "datalayer"],
+    "type": "library",
+    "license": "MIT",
+    "support": {
+        "email": "info@datalayer.ru",
+        "source": "https://github.com/DataLayerRU/RusGuardComponent"
+    },
+    "authors": [
+        {
+            "name": "Sergey Zinchenko",
+            "email": "zinchenko@datalayer.ru",
+            "homepage": "http://datalayer.ru"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "datalayerru\\skud\\": ""
+        }
+    }
+}
