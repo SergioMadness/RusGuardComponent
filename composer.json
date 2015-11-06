@@ -13,6 +13,9 @@
     "email": "info@datalayer.ru",
     "source": "https://github.com/DataLayerRU/RusGuardComponent"
   },
+  "require": {
+    "php": ">=5.4.0"
+  },
   "authors": [
     {
       "name": "Sergey Zinchenko",
