@@ -168,6 +168,7 @@ class Skud
                                 $lastName = 'Гость')
     {
         $result = null;
+        $this->addHeader();
         try {
             $data                         = new \stdClass();
             $data->employeeGroupID        = $groupId;
@@ -196,6 +197,7 @@ class Skud
     {
         $cardNumber = $this->prepareKey($cardNumber);
         $result     = null;
+        $this->addHeader();
         try {
             $data                       = new \stdClass();
             $data->employeeId           = $employeeId;
@@ -231,6 +233,7 @@ class Skud
     {
         $result     = false;
         $cardNumber = $this->prepareKey($cardNumber);
+        $this->addHeader();
         try {
             $result = $this->getSoap()->SetStatusOfAcsKeyAsLost([
                 'keyNumber' => $cardNumber,
@@ -253,7 +256,7 @@ class Skud
     {
         $cardNumber = $this->prepareKey($cardNumber);
         $result     = null;
-
+        $this->addHeader();
         try {
             $soapResult = $this->getSoap()->GetAssignedAcsKeyByKeyNumber([
                 'keyNumber' => $cardNumber
@@ -277,6 +280,7 @@ class Skud
     public function removeEmployee($id)
     {
         $result = null;
+        $this->addHeader();
         try {
             $result = $this->getSoap()->RemoveAcsEmployee([
                 'id' => $id
@@ -297,6 +301,7 @@ class Skud
     {
         $cardNumber = $this->prepareKey($cardNumber);
         $result     = null;
+        $this->addHeader();
         try {
             $empResult = $this->getSoap()->GetAssignedAcsKeyByKeyNumber([
                 'keyNumber' => $cardNumber
@@ -414,6 +419,30 @@ class Skud
                 'employeeId' => $employeeId,
                 'photoNumber' => $index
             ]);
+        } catch (\SoapFault $ex) {
+            $result = false;
+            $this->logError();
+        }
+        return $result;
+    }
+
+    /**
+     * Get employee
+     *
+     * @param string $employeeId
+     * @return Employee
+     */
+    public function getEmployee($employeeId)
+    {
+        $result = null;
+        $this->addHeader();
+        try {
+            $employee = $this->getSoap()->GetAcsEmployee([
+                'id' => $employeeId
+            ]);
+            if (isset($employee->GetAcsEmployeeResult)) {
+                $result = new Employee($employee->GetAcsEmployeeResult);
+            }
         } catch (\SoapFault $ex) {
             $result = false;
             $this->logError();
