@@ -5,12 +5,12 @@
 
 RusGuard component is available through [composer](https://getcomposer.org/)
 
-    composer require datalayerru/skud "dev-master"
+    composer require datalayerru/skud "*"
 
 Alternatively you can add the following to the `require` section in your `composer.json` manually:
 
 ```json
-"datalayerru/skud": "dev-master"
+"datalayerru/skud": "*"
 ```
 
 Run `composer update` afterwards.
@@ -64,6 +64,11 @@ $skud->getVariable($name);
 $skud->addEmployeePhoto($personInfo->ID, null, $base64Data);
 ```
 
+### Get employee info
+```php
+$skud->getEmployee($$personInfo->ID)
+```
+
 ### Get employee's photo
 ```php
 $skud->getEmployeePhoto($personInfo->ID, 1);
@@ -83,7 +88,7 @@ $result = $skud->getNotification();
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Sergey Zinchenko, DataLayer.ru
+Copyright (c) 2015 Sergey Zinchenko, [DataLayer.ru](http://datalayer.ru/))
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
