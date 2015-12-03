@@ -15,7 +15,7 @@ trait RGObjectTrait
     {
         $result = null;
 
-        if ($this->rawParams !== null && in_array($name, $this->rawParams)) {
+        if ($this->rawParams !== null && array_key_exists($name, $this->rawParams)) {
             $result = $this->rawParams[$name];
         }
 
