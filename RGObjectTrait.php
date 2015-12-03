@@ -6,7 +6,7 @@ trait RGObjectTrait
 {
     private $rawParams;
 
-    public function __construct($rawParams)
+    public function __construct(array $rawParams)
     {
         $this->rawParams = $rawParams;
     }
@@ -15,8 +15,8 @@ trait RGObjectTrait
     {
         $result = null;
 
-        if ($this->rawParams !== null && property_exists($this->rawParams, $name)) {
-            $result = $this->rawParams->$name;
+        if ($this->rawParams !== null && in_array($name, $this->rawParams)) {
+            $result = $this->rawParams[$name];
         }
 
         return $result;
