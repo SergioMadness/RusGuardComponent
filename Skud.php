@@ -178,7 +178,7 @@ class Skud
             $data->data->CreationDateTime = date('Y-m-d\TH:i:s.811P');
             $data->data->EmployeeGroupID  = $groupId;
 
-            $result = new Employee($this->getSoap()->AddAcsEmployee($data)->AddAcsEmployeeResult);
+            $result = new Employee((array)$this->getSoap()->AddAcsEmployee($data)->AddAcsEmployeeResult);
         } catch (\SoapFault $ex) {
             $this->logError();
         }
@@ -441,7 +441,7 @@ class Skud
                 'id' => $employeeId
             ]);
             if (isset($employee->GetAcsEmployeeResult)) {
-                $result = new Employee($employee->GetAcsEmployeeResult);
+                $result = new Employee((array)$employee->GetAcsEmployeeResult);
             }
         } catch (\SoapFault $ex) {
             $result = false;
