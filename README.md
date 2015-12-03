@@ -25,8 +25,13 @@ $skud->password = '';
 
 ### Add person to SKUD
 ```php
-$personInfo = $skud->addEmployee('75f918bf-24fc-445f-8ff5-8fd11e1ad361', 'John', 'Johnov');
+$personInfo = $skud->addEmployee('75f918bf-24fc-445f-8ff5-8fd11e1ad361', 'John', 'Johnov', 'Merian');
 $skud->assignKey($personInfo->ID, '9874566321154');
+```
+
+### Update person to SKUD
+```php
+$result = $skud->updateEmployee($personInfo->ID, 'John', 'Smith', 'Merian');
 ```
 
 ### Set key is lost

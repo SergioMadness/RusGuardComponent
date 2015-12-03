@@ -165,7 +165,7 @@ class Skud
      * @return \datalayer\rusguard\Employee
      */
     public function addEmployee($groupId, $firstName = 'Гость',
-                                $lastName = 'Гость')
+                                $lastName = 'Гость', $secondName = '')
     {
         $result = null;
         $this->addHeader();
@@ -175,10 +175,41 @@ class Skud
             $data->data                   = new \stdClass();
             $data->data->FirstName        = $firstName;
             $data->data->LastName         = $lastName;
+            $data->data->SecondName       = $secondName;
             $data->data->CreationDateTime = date('Y-m-d\TH:i:s.811P');
             $data->data->EmployeeGroupID  = $groupId;
 
             $result = new Employee((array)$this->getSoap()->AddAcsEmployee($data)->AddAcsEmployeeResult);
+        } catch (\SoapFault $ex) {
+            $this->logError();
+        }
+        return $result;
+    }
+
+    /**
+     * Update employee's info
+     *
+     * @param integer $id
+     * @param string $firstName
+     * @param string $lastName
+     * @param string $secondName
+     * @return bool
+     */
+    public function updateEmployee($id, $firstName, $lastName, $secondName = '')
+    {
+        $result = false;
+        $this->addHeader();
+        try {
+            $data                             = new \stdClass();
+            $data->id                         = $id;
+            $data->data                       = new \stdClass();
+            $data->data->FirstName            = $firstName;
+            $data->data->LastName             = $lastName;
+            $data->data->SecondName           = $secondName;
+            $data->data->ModificationDateTime = date('Y-m-d\TH:i:s.811P');
+
+            $this->getSoap()->SaveAcsEmployee($data);
+            $result = true;
         } catch (\SoapFault $ex) {
             $this->logError();
         }
