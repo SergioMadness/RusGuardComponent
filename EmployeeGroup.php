@@ -1,6 +1,6 @@
 <?php
 
-namespace datalayerru\skud;
+namespace professionalweb\skud;
 
 class EmployeeGroup
 {

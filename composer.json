@@ -1,31 +1,32 @@
 {
-  "name": "datalayerru/skud",
-  "version": "0.3.3",
+  "name": "professionalweb/skud",
+  "version": "0.3.4",
   "description": "Commponent for communication with RusGuard",
   "keywords": [
     "RusGuard",
     "rgsec",
-    "datalayer"
+    "professional web",
+    "web-development"
   ],
   "type": "library",
   "license": "MIT",
   "support": {
-    "email": "info@datalayer.ru",
-    "source": "https://github.com/DataLayerRU/RusGuardComponent"
-  },
-  "require": {
-    "php": ">=5.4.0"
+    "email": "info@web-development.pw",
+    "source": "https://github.com/SergioMadness/RusGuardYii2"
   },
   "authors": [
     {
       "name": "Sergey Zinchenko",
-      "email": "zinchenko@datalayer.ru",
-      "homepage": "http://datalayer.ru"
+      "email": "info@web-development.pw",
+      "homepage": "http://web-development.pw"
     }
   ],
+  "require": {
+    "php": ">=5.4.0"
+  },
   "autoload": {
     "psr-4": {
-      "datalayerru\\skud\\": ""
+      "professionalweb\\skud\\": ""
     }
   }
 }

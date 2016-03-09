@@ -1,6 +1,6 @@
 <?php
 
-namespace datalayerru\skud;
+namespace professionalweb\skud;
 
 
 class Skud
@@ -162,7 +162,7 @@ class Skud
      * @param string $groupId
      * @param string $firstName
      * @param string $lastName
-     * @return \datalayer\rusguard\Employee
+     * @return \professionalweb\rusguard\Employee
      */
     public function addEmployee($groupId, $firstName = 'Гость',
                                 $lastName = 'Гость', $secondName = '')
@@ -349,7 +349,7 @@ class Skud
     /**
      * Get group list
      *
-     * @return \datalayer\rusguard\EmployeeGroup[]
+     * @return \professionalweb\rusguard\EmployeeGroup[]
      */
     public function getGroups()
     {

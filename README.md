@@ -5,19 +5,19 @@
 
 RusGuard component is available through [composer](https://getcomposer.org/)
 
-    composer require datalayerru/skud "*"
+    composer require professionalweb/skud "*"
 
 Alternatively you can add the following to the `require` section in your `composer.json` manually:
 
 ```json
-"datalayerru/skud": "*"
+"professionalweb/skud": "*"
 ```
 
 Run `composer update` afterwards.
 
 ### In your PHP project
 ```php
-$skud = new \datalayerru\skud\Skud();
+$skud = new \professionalweb\skud\Skud();
 $skud->url = 'http://skud/LNetworkServer/LNetworkService.svc?singleWsdl',
 $skud->login = 'admin';
 $skud->password = '';
@@ -93,7 +93,7 @@ $result = $skud->getNotification();
 
 The MIT License (MIT)
 
-Copyright (c) 2015 Sergey Zinchenko, [DataLayer.ru](http://datalayer.ru/)
+Copyright (c) 2015 Sergey Zinchenko, [Professional web](http://web-development.pw/)
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
